@@ -1,53 +1,34 @@
-// scripts.js
 document.addEventListener('DOMContentLoaded', () => {
     const registerForm = document.getElementById('register-form');
-    const loginForm = document.getElementById('login-form');
 
-    registerForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
+    registerForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
         const formData = new FormData(registerForm);
+        const fullname = formData.get('full_name');
         const username = formData.get('username');
-        const password = formData.get('password');
         const email = formData.get('email');
-        const full_name = formData.get('full_name');
-        try {
-            const response = await fetch('/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username, password, email, full_name })
-            });
-            if (response.ok) {
-                alert('Registration successful');
-            } else {
-                alert('Registration failed');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    });
-
-    loginForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const formData = new FormData(loginForm);
-        const username = formData.get('username');
         const password = formData.get('password');
-        try {
-            const response = await fetch('/login', {
+
+        try{
+            const response = await fetch('api/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username, password })
-            });
-            if (response.ok) {
-                alert('Login successful');
+                }, 
+                body: JSON.stringify(fullname, username, email, password)
+            }); // wait for the fetch method to be triggered
+
+            // check if the response was successful or not.
+            if (response.ok){
+                alert("Registration was successfull.");
             } else {
-                alert('Invalid username or password');
+                alert("Registration Failed.");
             }
-        } catch (error) {
-            console.error('Error:', error);
+        } catch(error) {
+            console.log(error);
         }
+
+
     });
 });
